@@ -1,0 +1,9 @@
+version: "3.8"
+services:
+    database:
+        image: mysql:latest
+        environment:
+            MYSQL_DATABASE: theistest
+            MYSQL_ROOT_PASSWORD: secret
+        ports:
+            - "3306:3306"
