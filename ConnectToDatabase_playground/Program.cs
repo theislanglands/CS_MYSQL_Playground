@@ -17,9 +17,12 @@ internal class Program
         dataLayer.OpenConnection();
 
         dataLayer.SeedDatabase();
-        //dataLayer.InsertInDatabase("Thomas", 12);
-        //dataLayer.InsertInDatabase("Hans", 42);
 
+        dataLayer.InsertInDatabase("Hansi", 42);
+
+        var noOfRecords = dataLayer.CountPersons();
+        Console.WriteLine($"Number of persons in database = {noOfRecords}");
+        
         dataLayer.ReadRecords();
 
         dataLayer.CloseConnection();

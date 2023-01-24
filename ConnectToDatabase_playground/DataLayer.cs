@@ -115,5 +115,13 @@ namespace Datalayer
                 cmd.ExecuteNonQuery();
             }
         }
+
+        // use the ExecuteScalar method to return a single value
+        public long CountPersons()
+        {
+            string sql = "SELECT COUNT(*) FROM person;";
+            MySqlCommand cmd = new MySqlCommand(sql, connection);
+            return (long) cmd.ExecuteScalar();
+        }
     }
 }
