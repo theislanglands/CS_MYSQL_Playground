@@ -17,8 +17,8 @@ internal class Program
         dataLayer.OpenConnection();
 
         dataLayer.SeedDatabase();
-        dataLayer.InsertInDatabase("Thomas", 12);
-        dataLayer.InsertInDatabase("HANS", 42);
+        //dataLayer.InsertInDatabase("Thomas", 12);
+        //dataLayer.InsertInDatabase("Hans", 42);
 
         dataLayer.ReadRecords();
 

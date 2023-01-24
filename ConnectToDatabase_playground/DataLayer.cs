@@ -69,10 +69,9 @@ namespace Datalayer
         }
         
         // ExecuteNonQuery to insert, update, and delete data.
-
         public void InsertInDatabase(string name, int age)
         {
-            Console.WriteLine("inserting in database");
+            Console.WriteLine($"Inserting: {name} aged {age} in database");
             string sql = $"INSERT INTO person(Name, Age) VALUES ('{name}', {age});";
             MySqlCommand cmd = new MySqlCommand(sql, connection);
             cmd.ExecuteNonQuery();
@@ -82,20 +81,39 @@ namespace Datalayer
         public void SeedDatabase()
         {
             Console.WriteLine("Seeding database");
-            ArrayList sqlStatements = new ArrayList();
-            sqlStatements.Add("DROP TABLE IF EXISTS person;");
-            sqlStatements.Add("CREATE TABLE person (ID int NOT NULL AUTO_INCREMENT, Name varchar(255), Age int, PRIMARY KEY (ID));");
+            DropAndCreateNewPersonTable();
+            InsertThreeRandomPersons();
+        }
 
-            foreach (string sqlStatement in sqlStatements)
+        private void InsertThreeRandomPersons()
+        {
+            Console.WriteLine("Inserting three random persons");
+            Dictionary<string, int> persons = new Dictionary<string, int>()
             {
-                Console.WriteLine($"running {sqlStatement}");
-                var cmd = new MySqlCommand(sqlStatement, connection);
-                cmd.ExecuteNonQuery();
+                { "Torben", 67 },
+                { "Birthe", 42 },
+                { "Hr. Jensen", 12 }
+            };
+
+            foreach (var person in persons)
+            {
+                InsertInDatabase(person.Key, person.Value);
             }
         }
 
-        public void Insert(string name, int age)
+        private void DropAndCreateNewPersonTable()
         {
+            Console.WriteLine("Drop and create new table");
+            ArrayList sqlStatements = new ArrayList();
+            sqlStatements.Add("DROP TABLE IF EXISTS person;");
+            sqlStatements.Add(
+                "CREATE TABLE person (ID int NOT NULL AUTO_INCREMENT, Name varchar(255), Age int, PRIMARY KEY (ID));");
+
+            foreach (string sqlStatement in sqlStatements)
+            {
+                var cmd = new MySqlCommand(sqlStatement, connection);
+                cmd.ExecuteNonQuery();
+            }
         }
     }
 }
