@@ -81,7 +81,7 @@ namespace Datalayer
         public void SeedDatabase()
         {
             Console.WriteLine("Seeding database");
-            DropAndCreateNewPersonTable();
+            InitializeDatabaseTable();
             InsertThreeRandomPersons();
         }
 
@@ -101,7 +101,7 @@ namespace Datalayer
             }
         }
 
-        private void DropAndCreateNewPersonTable()
+        public void InitializeDatabaseTable()
         {
             Console.WriteLine("Drop and create new table");
             ArrayList sqlStatements = new ArrayList();
@@ -122,6 +122,17 @@ namespace Datalayer
             string sql = "SELECT COUNT(*) FROM person;";
             MySqlCommand cmd = new MySqlCommand(sql, connection);
             return (long) cmd.ExecuteScalar();
+        }
+
+        // https://dev.mysql.com/doc/connector-net/en/connector-net-tutorials-parameters.html
+        public void InsertWithPreparedStatements(string name, int age)
+        {
+            Console.WriteLine($"Inserting: {name} aged {age} in database using prepared statement");
+            string sql = "INSERT INTO person(Name, Age) VALUES (@name, @age);";
+            MySqlCommand cmd = new MySqlCommand(sql, connection);
+            cmd.Parameters.AddWithValue("@name", name);
+            cmd.Parameters.AddWithValue("@age", age);
+            cmd.ExecuteNonQuery();
         }
     }
 }
