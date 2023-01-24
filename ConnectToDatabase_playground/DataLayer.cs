@@ -1,36 +1,32 @@
 ﻿using System;
 using MySql.Data;
 using MySql.Data.MySqlClient;
+using System.Collections;
+using Mysqlx.Crud;
+using System.Xml.Linq;
 
 namespace Datalayer
 {
-	
-
     public class DataLayer
-	{
-        string connection_string = "server=localhost;user=root;database=theistest;port=3306;password=secret";
+    {
+        private readonly string _connectionString =
+            "server=localhost;user=root;database=theistest;port=3306;password=secret";
+
         MySqlConnection connection;
 
 
         public DataLayer()
-		{
+        {
+        }
 
-		}
 
-		public void TestingObject()
-		{
-			Console.WriteLine("hul igennem");
-		}
-
-		public void OpenConnection()
-		{
-            connection = new MySqlConnection(connection_string);
-
+        public void OpenConnection()
+        {
+            connection = new MySqlConnection(_connectionString);
             try
             {
                 Console.WriteLine("connecting");
                 connection.Open();
-
             }
             catch (Exception ex)
             {
@@ -44,16 +40,17 @@ namespace Datalayer
             connection.Close();
         }
 
+        // ExecuteReader to GET information
         public void ReadRecords()
         {
             Console.WriteLine("reading records");
-            // (peron(id, name, age)
+            // (person(id, name, age)
 
             // create query 
             string sql = "SELECT * FROM person";
             MySqlCommand cmd = new MySqlCommand(sql, connection);
 
-            // excecute query and return result in object (don't create object with constructor!)
+            // execute query and return result in object (don't create object with constructor!)
             MySqlDataReader reader = cmd.ExecuteReader();
 
             // Advances the MySqlDataReader to the next record - returns false, when no more
@@ -70,6 +67,35 @@ namespace Datalayer
 
             reader.Close();
         }
-	}
-}
+        
+        // ExecuteNonQuery to insert, update, and delete data.
 
+        public void InsertInDatabase(string name, int age)
+        {
+            Console.WriteLine("inserting in database");
+            string sql = $"INSERT INTO person(Name, Age) VALUES ('{name}', {age});";
+            MySqlCommand cmd = new MySqlCommand(sql, connection);
+            cmd.ExecuteNonQuery();
+        }
+
+
+        public void SeedDatabase()
+        {
+            Console.WriteLine("Seeding database");
+            ArrayList sqlStatements = new ArrayList();
+            sqlStatements.Add("DROP TABLE IF EXISTS person;");
+            sqlStatements.Add("CREATE TABLE person (ID int NOT NULL AUTO_INCREMENT, Name varchar(255), Age int, PRIMARY KEY (ID));");
+
+            foreach (string sqlStatement in sqlStatements)
+            {
+                Console.WriteLine($"running {sqlStatement}");
+                var cmd = new MySqlCommand(sqlStatement, connection);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public void Insert(string name, int age)
+        {
+        }
+    }
+}

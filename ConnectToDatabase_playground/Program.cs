@@ -2,21 +2,24 @@
 using System.Data;
 using Datalayer;
 
+// https://dev.mysql.com/doc/connector-net/en/connector-net-tutorials-sql-command.html
+
 
 internal class Program
 {
     private static void Main(string[] args)
     {
-        DataLayer dataLayer = new DataLayer();
-
         Console.WriteLine("Testing my database");
 
+        DataLayer dataLayer = new DataLayer();
 
-        dataLayer.TestingObject();
 
         dataLayer.OpenConnection();
 
-        
+        dataLayer.SeedDatabase();
+        dataLayer.InsertInDatabase("Thomas", 12);
+        dataLayer.InsertInDatabase("HANS", 42);
+
         dataLayer.ReadRecords();
 
         dataLayer.CloseConnection();
